@@ -38,7 +38,7 @@ compNorm(x,...,bw="AUTO",xlim=c(-3,3),titles="AUTO",type="d")
 \examples{
  # Normalize swirl data with two methods
  data(swirl)
- swirlNN<-maNormNN(swirl[,1])$batchn      
+ swirlNN<-maNormNN(swirl[,1])
  swirlLoess<-maNormMain(swirl[,1]) 
  nms<-c("None","Loess","NNets")
  #compare distributions: density plot

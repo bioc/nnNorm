@@ -4,7 +4,7 @@
 \description{This function normalizes a batch of cDNA arrays by removing the intensity and spatial dependent bias.
 }
 \usage{
-maNormNN(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,save.models=TRUE,robust=TRUE,maplots=FALSE) 
+maNormNN(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,robust=TRUE,maplots=FALSE) 
 }
 
 \arguments{
@@ -27,9 +27,6 @@ maNormNN(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,save.model
   \item{iterations}{The number of iterations at which (if not converged) the training of the neural net will be 
                    stopped.
   }
-  \item{save.models}{If set to \code{"TRUE"} will enable storage of the models (parameters and ranges of aplicability) in the
-    component \code{models} of the list that this function returns.                    
-  }
   \item{robust}{If set to \code{"TRUE"}, each spot will be assigned a weight in the model identification, providing resistance to
           outliers.
   }
@@ -42,12 +39,8 @@ maNormNN(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,save.model
 
 
 \value{
-  A list with components:
-  \item{batchn}{A \code{marrayNorm} object containing the normalized log ratios. See \code{marrayNorm} 
+  A \code{marrayNorm} object containing the normalized log ratios. See \code{marrayNorm} 
     class for details
-  }
-  \item{models}{A list containing the parameters and ranges of aplicability for the models. This component
-     is to be used only as a argument to the function \code{predictBias}. 
   }
 }
 
@@ -58,10 +51,10 @@ maNormNN(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,save.model
 # Normalization of swirl data
 data(swirl)
 # print-tip, intensity and spatial normalization of the first slide in swirl data set
-swirlNN<-maNormNN(swirl[,1])$batchn    
+swirlNN<-maNormNN(swirl[,1])   
 
 #do not consider spatial variations, and display M-A plots before and after normalization
-swirlNN<-maNormNN(swirl[,1],binWidth=maNsc(swirl),binHeight=maNsr(swirl),maplots=TRUE)$batchn    
+swirlNN<-maNormNN(swirl[,1],binWidth=maNsc(swirl),binHeight=maNsr(swirl),maplots=TRUE)  
 
 }
 
@@ -71,7 +64,7 @@ swirlNN<-maNormNN(swirl[,1],binWidth=maNsc(swirl),binHeight=maNsr(swirl),maplots
 intensity dependent normalization of cDNA data. Bioinformatics. 2004,submitted.\cr
 }	
 
-\seealso{\code{\link{predictBias}},\code{\link{compNorm}},\code{nnet}}
+\seealso{\code{\link{compNorm}},\code{nnet}}
 
 \keyword{smooth}
 \keyword{robust}
