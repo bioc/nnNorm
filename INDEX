@@ -1,5 +1,3 @@
 compNorm                Compares the distribution of several data sets
 maNormNN                Intensity and spatial normalization using
                         robust neural networks fitting
-predictBias             Computes the bias estimate provided a neural
-                        network color distortion model
