@@ -1,5 +1,5 @@
 Package: nnNorm
-Version: 1.0
+Version: 1.0.1
 Date: 2004-09-01
 Title: Spatial and intensity based normalization of cDNA microarray data based on robust neural nets
 Author: Tarca Adi Laurentiu <ltarca@rsvs.ulaval.ca>
@@ -8,4 +8,4 @@ Maintainer: Tarca Laurentiu <ltarca@rsvs.ulaval.ca>
 Description: Spatial and intensity based normalization of cDNA microarray data based on robust neural nets
 License: LGPL
 URL: 
-Packaged: Tue Sep 14 17:53:20 2004; tarlau01
+Packaged: Thu Oct 21 14:12:23 2004; Laurentiu

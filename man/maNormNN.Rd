@@ -57,11 +57,11 @@ maNormNN(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,save.model
 \examples{
 # Normalization of swirl data
 data(swirl)
-# print-tip, intensity and spatial normalization of the first two slides in swirl data set
-swirlNN<-maNormNN(swirl[,1:2])$batchn    
+# print-tip, intensity and spatial normalization of the first slide in swirl data set
+swirlNN<-maNormNN(swirl[,1])$batchn    
 
 #do not consider spatial variations, and display M-A plots before and after normalization
-swirlNN<-maNormNN(swirl[,1:2],binWidth=maNsc(swirl),binHeight=maNsr(swirl),maplots=TRUE)$batchn    
+swirlNN<-maNormNN(swirl[,1],binWidth=maNsc(swirl),binHeight=maNsr(swirl),maplots=TRUE)$batchn    
 
 }
 
