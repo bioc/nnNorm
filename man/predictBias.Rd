@@ -48,7 +48,7 @@ AA<-maA(swirl[maPrintTip(swirl)==pt,s])
 A<-seq(sNNr$models$lims[1,pt,s],sNNr$models$lims[3,pt,s],length=100)
 
 #do the plots
-x11()
+if(interactive()){x11()}
 plot(AA,MM,pch=20,xlab="A",ylab="M",main=paste("Slide=",s," Print tip=",pt)) #raw data
 lines(A,predictBias(A,sNNr$models,s,pt),col="red",lwd=2) #robust NN
 

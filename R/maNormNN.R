@@ -130,12 +130,12 @@ maNormNN<-function(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,
    } #end with print tip 
    if(maplots) {
      #ploting the original M vs A for each slide 
-     x11()
+     if(interactive()){x11()}
      plot(maA(mbatch[,s]),maM(mbatch[,s]),xlab="A",ylab="M",main=c("MA-plot before ANN   normalization for slide No.  ",s),pch=20);
      lines(c(min(na.omit(maA(mbatch[,s]))),max(na.omit(maA(mbatch[,s])))),c(0,0),col="red",lwd=2); 
   
      #ploting the normalized M vs A for each slide 
-     x11()
+     if(interactive()){x11()}
      plot(maA(mbatchn[,s]),maM(mbatchn[,s]),xlab="A",ylab="M",main=c("MA-plot after ANN normalization for slide  No.  ",s),pch=20);
      lines(c(min(na.omit(maA(mbatch[,s]))),max(na.omit(maA(mbatch[,s])))),c(0,0),col="red",lwd=2); 
    }
