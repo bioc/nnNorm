@@ -56,6 +56,7 @@ maNormNN<-function(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,
  set.seed(100) #require a fixed seed to obtain always the same normalized results 
 
  for (s in 1:NSlides){                                        #for each slide
+   cat(paste("\n","Processing silde ",s," of ",NSlides,"\n",sep=""));
    for (pt in 1:Npt){                                         #for each print Tip
      
         #get positions in each sector/tip group
@@ -142,17 +143,18 @@ maNormNN<-function(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,
      if(interactive()){x11()}
     
      plot(maA(mbatch[,s]),maM(mbatch[,s]),xlab="A",ylab="M",main=paste("MA-plot before ANN normalization. Slide #",s,sep=""),pch=20,cex.main=0.5,cex.lab=0.5);
-     lines(c(min(na.omit(maA(mbatch[,s]))),max(na.omit(maA(mbatch[,s])))),c(0,0),col="black",lwd=2); 
+     lines(c(min(na.omit(maA(mbatch[,s]))),max(na.omit(maA(mbatch[,s])))),c(0,0),col="grey",lwd=2); 
+     
      if (nv==1){
-      cola<-rep(c(2,3,4,5,6,7,8),10) 
-
+       cola<-rep(c(2,3,4,5,6,7,8),10);  
        for(ppt in 1:Npt){
         a<-maA(mbatch[maPrintTip(mbatch)==ppt,s])
         be<-maM(mbatch[maPrintTip(mbatch)==ppt,s])-maM(mbatchn[maPrintTip(mbatch)==ppt,s])
         or<-order(a)
         points(a[or],be[or],col=cola[ppt],pch=20,cex=0.5);}
+       legend(min(na.omit(maA(mbatch[,s]))),max(na.omit(maM(mbatch[,s]))),legend=paste(rep("Pt.",Npt),1:Npt,sep=""),text.col=cola[1:Npt],cex=0.5,ncol=Npt/2)
+     
      }
-     legend(min(na.omit(maA(mbatch[,s]))),max(na.omit(maM(mbatch[,s]))),legend=paste(rep("Pt.",Npt),1:Npt,sep=""),text.col=cola[1:Npt],cex=0.5,ncol=Npt/2)
      if(interactive()){x11()}
      plot(maA(mbatchn[,s]),maM(mbatchn[,s]),xlab="A",ylab="M",main=paste("MA-plot after ANN normalization. Slide #",s,sep=""),pch=20,cex.main=0.5,cex.lab=0.75);
      lines(c(min(na.omit(maA(mbatch[,s]))),max(na.omit(maA(mbatch[,s])))),c(0,0),col="red",lwd=2); 
