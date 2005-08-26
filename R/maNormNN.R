@@ -58,7 +58,7 @@ maNormNN<-function(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,
  for (s in 1:NSlides){                                        #for each slide
    cat(paste("\n","Processing silde ",s," of ",NSlides,"\n",sep=""));
    for (pt in 1:Npt){                                         #for each print Tip
-     
+        cat("*");
         #get positions in each sector/tip group
         ind<-maPrintTip(mbatch[,s])==pt 
         A<-maA(mbatch[ind,s])	                             #get M (log ratios)
@@ -104,13 +104,13 @@ maNormNN<-function(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,
         if(!robust){weigthsamp<-rep(1,length(weigthsamp))}
 	  while((trials<=2)&(mm>0.1)){
           nety1 <- nnet(cbind(Mat[s234,vectd]), Mat[s234,4], weights=weigthsamp[s234],size = nodes, rang = 0.5,
-                decay = 0, maxit = ite,reltol=0.75e-7)
+                decay = 0, maxit = ite,reltol=0.75e-7,trace=FALSE)
           nety2 <- nnet(cbind(Mat[s134,vectd]), Mat[s134,4], weights=weigthsamp[s134],size = nodes, rang = 0.5,
-                decay = 0, maxit = ite,reltol=0.75e-7)
+                decay = 0, maxit = ite,reltol=0.75e-7,trace=FALSE)
           nety3 <- nnet(cbind(Mat[s124,vectd]), Mat[s124,4], weights=weigthsamp[s124],size = nodes, rang = 0.5,
-                decay = 0, maxit = ite,reltol=0.75e-7)
+                decay = 0, maxit = ite,reltol=0.75e-7,trace=FALSE)
           nety4 <- nnet(cbind(Mat[s123,vectd]), Mat[s123,4], weights=weigthsamp[s123],size = nodes, rang = 0.5,
-                decay = 0, maxit = ite,reltol=0.75e-7)
+                decay = 0, maxit = ite,reltol=0.75e-7,trace=FALSE)
 
           # get the fitted values 
           yen<-array(dim=len) 
