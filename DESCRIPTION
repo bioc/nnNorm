@@ -8,6 +8,7 @@ Depends: R(>= 1.9.0), nnet, marray
 Maintainer: Tarca Laurentiu <atarca@med.wayne.edu>
 Description: Spatial and intensity based normalization of cDNA
         microarray data based on robust neural nets
+biocViews: Microarray, OneChannel, TwoChannel, Preprocessing
 License: LGPL
 URL:
 Packaged: Tue Oct 19 09:35:41 2004; madman
