@@ -107,6 +107,7 @@ maNormNN<-function(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,
           nety1 <- nnet(cbind(Mat[s234,vectd]), Mat[s234,4], weights=weigthsamp[s234],size = nodes, rang = 0.5,
                 decay = 0, maxit = ite,reltol=0.75e-7,trace=FALSE)
           SSE<-nety1$value; 
+          trials<-trials+1;
          } 
     
 	  trials<-1; SSE<-10;
@@ -114,6 +115,7 @@ maNormNN<-function(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,
           nety2 <- nnet(cbind(Mat[s134,vectd]), Mat[s134,4], weights=weigthsamp[s134],size = nodes, rang = 0.5,
                 decay = 0, maxit = ite,reltol=0.75e-7,trace=FALSE)
           SSE<-nety2$value; 
+          trials<-trials+1;
          } 
 
 	  trials<-1; SSE<-10;
@@ -121,6 +123,7 @@ maNormNN<-function(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,
           nety3 <- nnet(cbind(Mat[s124,vectd]), Mat[s124,4], weights=weigthsamp[s124],size = nodes, rang = 0.5,
                 decay = 0, maxit = ite,reltol=0.75e-7,trace=FALSE)
           SSE<-nety3$value; 
+          trials<-trials+1;
 	   }
 
 	  trials<-1; SSE<-10;
@@ -128,6 +131,7 @@ maNormNN<-function(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,
           nety4 <- nnet(cbind(Mat[s123,vectd]), Mat[s123,4], weights=weigthsamp[s123],size = nodes, rang = 0.5,
                 decay = 0, maxit = ite,reltol=0.75e-7,trace=FALSE)
           SSE<-nety4$value; 
+          trials<-trials+1;
 	   }
         
         # get the fitted values 
