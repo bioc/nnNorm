@@ -102,38 +102,61 @@ maNormNN<-function(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,
 
         if(!robust){weigthsamp<-rep(1,length(weigthsamp))}
 
-	  trials<-1; SSE<-10;
-        while((trials<=30)&(SSE>1)){
+	  trials<-1; mm<-1;
+        while((trials<=20)&(mm>0.5)){
           nety1 <- nnet(cbind(Mat[s234,vectd]), Mat[s234,4], weights=weigthsamp[s234],size = nodes, rang = 0.5,
                 decay = 0, maxit = ite,reltol=0.75e-7,trace=FALSE)
-          SSE<-nety1$value; 
+          yen<-NULL; 
+          yen<-predict(nety1,cbind(Xn[-s234,vectd]))
+          Mfit<-denorm28(yen,yLst$mins,yLst$maxs)
+	    Mfitted<-cbind(Mfit[[1]])
+          mm<-abs(median(Xyclean[-s234,4]-Mfitted)) #compute the mean of normalized M values, to know if all is ok
           trials<-trials+1;
          } 
-    
-	  trials<-1; SSE<-10;
-        while((trials<=30)&(SSE>1)){
+        if(trials>=20){warning(paste("At slide #",s," and subarray #",pt," there was a convergence problem.",sep=""))}   
+
+	  trials<-1; mm<-1;
+        while((trials<=20)&(mm>0.5)){
           nety2 <- nnet(cbind(Mat[s134,vectd]), Mat[s134,4], weights=weigthsamp[s134],size = nodes, rang = 0.5,
                 decay = 0, maxit = ite,reltol=0.75e-7,trace=FALSE)
-          SSE<-nety2$value; 
+          yen<-NULL; 
+          yen<-predict(nety2,cbind(Xn[-s134,vectd]))
+          #and denormalize them back
+          Mfit<-denorm28(yen,yLst$mins,yLst$maxs)
+	    Mfitted<-cbind(Mfit[[1]])
+          mm<-abs(median(Xyclean[-s134,4]-Mfitted)) #compute the mean of normalized M values, to know if all is ok
           trials<-trials+1;
          } 
+        if(trials>=20){warning(paste("At slide #",s," and subarray #",pt," there was a convergence problem.",sep=""))}   
 
-	  trials<-1; SSE<-10;
-        while((trials<=30)&(SSE>1)){
+	  trials<-1; mm<-1;
+        while((trials<=20)&(mm>0.5)){
           nety3 <- nnet(cbind(Mat[s124,vectd]), Mat[s124,4], weights=weigthsamp[s124],size = nodes, rang = 0.5,
                 decay = 0, maxit = ite,reltol=0.75e-7,trace=FALSE)
-          SSE<-nety3$value; 
+          yen<-NULL; 
+          yen<-predict(nety3,cbind(Xn[-s124,vectd]))
+          #and denormalize them back
+          Mfit<-denorm28(yen,yLst$mins,yLst$maxs)
+	    Mfitted<-cbind(Mfit[[1]])
+          mm<-abs(median(Xyclean[-s124,4]-Mfitted)) #compute the mean of normalized M values, to know if all is ok
           trials<-trials+1;
 	   }
+        if(trials>=20){warning(paste("At slide #",s," and subarray #",pt," there was a convergence problem.",sep=""))}   
 
-	  trials<-1; SSE<-10;
-        while((trials<=30)&(SSE>1)){
+	  trials<-1; mm<-1;
+        while((trials<=20)&(mm>0.5)){
           nety4 <- nnet(cbind(Mat[s123,vectd]), Mat[s123,4], weights=weigthsamp[s123],size = nodes, rang = 0.5,
                 decay = 0, maxit = ite,reltol=0.75e-7,trace=FALSE)
-          SSE<-nety4$value; 
+          yen<-NULL;
+          yen<-predict(nety4,cbind(Xn[-s123,vectd]))
+          #and denormalize them back
+          Mfit<-denorm28(yen,yLst$mins,yLst$maxs)
+	    Mfitted<-cbind(Mfit[[1]])
+          mm<-abs(median(Xyclean[-s123,4]-Mfitted)) #compute the mean of normalized M values, to know if all is ok
           trials<-trials+1;
 	   }
-        
+        if(trials>=20){warning(paste("At slide #",s," and subarray #",pt," there was a convergence problem.",sep=""))}   
+       
         # get the fitted values 
         yen<-array(dim=len) 
         yen[-s234]<-predict(nety1,cbind(Xn[-s234,vectd]))
@@ -143,9 +166,6 @@ maNormNN<-function(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,
         #and denormalize them back
         Mfit<-denorm28(yen,yLst$mins,yLst$maxs)
 	  Mfitted<-cbind(Mfit[[1]])
-        mm<-abs(mean(Xyclean[,4]-Mfitted)) #compute the mean of normalized M values, to know if all is ok
-        if(mm>0.1){warning("A convergence problem might have been occurred with the nnet function. Normalization results may be inaccurate.")}   
-
 	  Mfit<-Mfitted;
         
         # insert NaNs where they where in the original M vector if is the case
