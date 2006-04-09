@@ -5,7 +5,7 @@ require(nnet)
 require(marray)
 
 
-maNormNN<-function(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,robust=TRUE,maplots=FALSE) 
+maNormNN<-function(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,robust=TRUE,maplots=FALSE, verbose=FALSE) 
 {
  #see what kind of object is mbatch and initialize a new normalized one "mbatchn"
  if (class(mbatch)=="marrayRaw") {
@@ -51,17 +51,17 @@ maNormNN<-function(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,
  breaksYr<-as.integer(bYr); YrLev<-seq(0,1,length=nby);
 
  NSlides<-maNsamples(mbatch)           #get the number of slides in batch
- Npt<-maNgr(mbatch)*maNgc(mbatch)	   #get the number of print tips
- Nspots<-maNspots(mbatch)		   #get the number of spots per slide
- set.seed(100) #require a fixed seed to obtain always the same normalized results 
+ Npt<-maNgr(mbatch)*maNgc(mbatch)      #get the number of print tips
+ Nspots<-maNspots(mbatch)          #get the number of spots per slide
+ set.seed(200) #require a fixed seed to obtain always the same normalized results 
 
  for (s in 1:NSlides){                                        #for each slide
-   cat(paste("\n","Processing silde ",s," of ",NSlides,"\n",sep=""));
+   cat(paste("\n","Processing array ",s," of ",NSlides,"\n",sep=""));
    for (pt in 1:Npt){                                         #for each print Tip
         cat("*");
         #get positions in each sector/tip group
         ind<-maPrintTip(mbatch[,s])==pt 
-        A<-maA(mbatch[ind,s])	                             #get M (log ratios)
+        A<-maA(mbatch[ind,s])                                #get M (log ratios)
         M<-maM(mbatch[ind,s])                              #get A (log intensity)
         xc<-factor(cut(maSpotCol(mbatch[ind,s]), breaks = breaksXc))
         yr<-factor(cut(maSpotRow(mbatch[ind,s]), breaks = breaksYr))
@@ -69,121 +69,148 @@ maNormNN<-function(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,
         levels(yr)<-YrLev;
         #buid the predictors-target matrix
         Xy<-cbind(xc,yr,A,M);
-        Xyclean<-na.omit(Xy);	#remove NaN
+        Xyclean<-na.omit(Xy);   #remove NaN
         XLst<-norm01(Xyclean[,1:3]); #normalize predictors to be in interval 0_1 
-	  yLst<-norm28(cbind(Xyclean[,4])); #normalize target to be in interval 0.2_0.8
+      yLst<-norm28(cbind(Xyclean[,4])); #normalize target to be in interval 0.2_0.8
         yn<-yLst$Xn;
-	  Xn<-XLst$Xn;
+      Xn<-XLst$Xn;
         #compute weigths for samples
         bins<-20;  nv<-length(vectd)
         breaksA <-seq(0, dim(Xn)[1],length=(bins+1))
         ax<-factor(cut(1:dim(Xn)[1],breaks=breaksA))
         levels(ax)<-1:bins
         ord<-order(Xn[,3])
-	  Mat<-cbind(Xn[ord,],yn[ord],ax)
+      Mat<-cbind(Xn[ord,],yn[ord],ax)
         weigthsamp<-NULL;
-	  for (i in 1:bins)
-	    { Minbini<-Mat[Mat[,5]==i,4]
+      for (i in 1:bins)
+        { Minbini<-Mat[Mat[,5]==i,4]
             weigthi<-tricube(Minbini)
- 	      weigthsamp<-c(weigthsamp, weigthi)
-	     }
-	  #end compute weights
+          weigthsamp<-c(weigthsamp, weigthi)
+         }
+      #end compute weights
         len<-dim(Mat)[1]
-        aS<-1:len;
-        smp1<-sample(aS,round(len/4)) 
-        smp2<-sample(aS[-smp1],round(len/4)) 
-        smp3<-sample(aS[-c(smp1,smp2)],round(len/4)) 
-        smp4<-aS[-c(smp1,smp2,smp3)] 
+        aS<-1:len; 
+        smp1<-sample(aS,round(len/5)) 
+        smp2<-sample(aS[-smp1],round(len/5)) 
+        smp3<-sample(aS[-c(smp1,smp2)],round(len/5)) 
+        smp4<-sample(aS[-c(smp1,smp2,smp3)],round(len/5))
+        smp5<-aS[-c(smp1,smp2,smp3,smp4)] 
 
-        s234<-c(smp2,smp3,smp4);
-        s134<-c(smp1,smp3,smp4);
-        s124<-c(smp1,smp2,smp4); 
-        s123<-c(smp1,smp2,smp3); 
-
-        if(!robust){weigthsamp<-rep(1,length(weigthsamp))}
-
-	  trials<-1; mm<-1;
+        s2345<-c(smp2,smp3,smp4,smp5);
+        s1345<-c(smp1,smp3,smp4,smp5);
+        s1245<-c(smp1,smp2,smp4,smp5); 
+        s1235<-c(smp1,smp2,smp3,smp5); 
+        s1234<-c(smp1,smp2,smp3,smp4);
+         
+      if(!robust){weigthsamp<-rep(1,length(weigthsamp))}
+      estm<-NULL;
+     for (rr in 1:4){ #get 4 estimates
+        trials<-1; mm<-1;
         while((trials<=20)&(mm>0.5)){
-          nety1 <- nnet(cbind(Mat[s234,vectd]), Mat[s234,4], weights=weigthsamp[s234],size = nodes, rang = 0.5,
-                decay = 0, maxit = ite,reltol=0.75e-7,trace=FALSE)
+          nety1 <- nnet(cbind(Mat[s2345,vectd]), Mat[s2345,4], weights=weigthsamp[s2345],size = nodes, rang = 0.5,
+                decay=1e-4, maxit = ite,reltol=0.75e-7,trace=verbose)
           yen<-NULL; 
-          yen<-predict(nety1,cbind(Xn[-s234,vectd]))
+          yen<-predict(nety1,cbind(Xn[-s2345,vectd]))
           Mfit<-denorm28(yen,yLst$mins,yLst$maxs)
-	    Mfitted<-cbind(Mfit[[1]])
-          mm<-abs(median(Xyclean[-s234,4]-Mfitted)) #compute the mean of normalized M values, to know if all is ok
+         Mfitted<-cbind(Mfit[[1]])
+          mm<-abs(median(Xyclean[-s2345,4]-Mfitted)) #compute the mean of normalized M values, to know if all is ok
           trials<-trials+1;
          } 
         if(trials>=20){warning(paste("At slide #",s," and subarray #",pt," there was a convergence problem.",sep=""))}   
 
-	  trials<-1; mm<-1;
+        trials<-1; mm<-1;
         while((trials<=20)&(mm>0.5)){
-          nety2 <- nnet(cbind(Mat[s134,vectd]), Mat[s134,4], weights=weigthsamp[s134],size = nodes, rang = 0.5,
-                decay = 0, maxit = ite,reltol=0.75e-7,trace=FALSE)
+          nety2 <- nnet(cbind(Mat[s1345,vectd]), Mat[s1345,4], weights=weigthsamp[s1345],size = nodes, rang = 0.5,
+                decay=1e-4, maxit = ite,reltol=0.75e-7,trace=verbose)
           yen<-NULL; 
-          yen<-predict(nety2,cbind(Xn[-s134,vectd]))
+          yen<-predict(nety2,cbind(Xn[-s1345,vectd]))
           #and denormalize them back
           Mfit<-denorm28(yen,yLst$mins,yLst$maxs)
-	    Mfitted<-cbind(Mfit[[1]])
-          mm<-abs(median(Xyclean[-s134,4]-Mfitted)) #compute the mean of normalized M values, to know if all is ok
+         Mfitted<-cbind(Mfit[[1]])
+          mm<-abs(median(Xyclean[-s1345,4]-Mfitted)) #compute the mean of normalized M values, to know if all is ok
           trials<-trials+1;
          } 
-        if(trials>=20){warning(paste("At slide #",s," and subarray #",pt," there was a convergence problem.",sep=""))}   
+         if(trials>=20){warning(paste("At slide #",s," and subarray #",pt," there was a convergence problem.",sep=""))}   
 
-	  trials<-1; mm<-1;
+        trials<-1; mm<-1;
         while((trials<=20)&(mm>0.5)){
-          nety3 <- nnet(cbind(Mat[s124,vectd]), Mat[s124,4], weights=weigthsamp[s124],size = nodes, rang = 0.5,
-                decay = 0, maxit = ite,reltol=0.75e-7,trace=FALSE)
+          nety3 <- nnet(cbind(Mat[s1245,vectd]), Mat[s1245,4], weights=weigthsamp[s1245],size = nodes, rang = 0.5,
+                decay=1e-4, maxit = ite,reltol=0.75e-7,trace=verbose)
           yen<-NULL; 
-          yen<-predict(nety3,cbind(Xn[-s124,vectd]))
+          yen<-predict(nety3,cbind(Xn[-s1245,vectd]))
           #and denormalize them back
           Mfit<-denorm28(yen,yLst$mins,yLst$maxs)
-	    Mfitted<-cbind(Mfit[[1]])
-          mm<-abs(median(Xyclean[-s124,4]-Mfitted)) #compute the mean of normalized M values, to know if all is ok
+         Mfitted<-cbind(Mfit[[1]])
+          mm<-abs(median(Xyclean[-s1245,4]-Mfitted)) #compute the mean of normalized M values, to know if all is ok
           trials<-trials+1;
-	   }
+        }
         if(trials>=20){warning(paste("At slide #",s," and subarray #",pt," there was a convergence problem.",sep=""))}   
 
-	  trials<-1; mm<-1;
+        trials<-1; mm<-1;
         while((trials<=20)&(mm>0.5)){
-          nety4 <- nnet(cbind(Mat[s123,vectd]), Mat[s123,4], weights=weigthsamp[s123],size = nodes, rang = 0.5,
-                decay = 0, maxit = ite,reltol=0.75e-7,trace=FALSE)
+          nety4 <- nnet(cbind(Mat[s1235,vectd]), Mat[s1235,4], weights=weigthsamp[s1235],size = nodes, rang = 0.5,
+                decay=1e-4, maxit = ite,reltol=0.75e-7,trace=verbose)
           yen<-NULL;
-          yen<-predict(nety4,cbind(Xn[-s123,vectd]))
+          yen<-predict(nety4,cbind(Xn[-s1235,vectd]))
           #and denormalize them back
           Mfit<-denorm28(yen,yLst$mins,yLst$maxs)
-	    Mfitted<-cbind(Mfit[[1]])
-          mm<-abs(median(Xyclean[-s123,4]-Mfitted)) #compute the mean of normalized M values, to know if all is ok
+         Mfitted<-cbind(Mfit[[1]])
+          mm<-abs(median(Xyclean[-s1235,4]-Mfitted)) #compute the mean of normalized M values, to know if all is ok
           trials<-trials+1;
-	   }
+        }
         if(trials>=20){warning(paste("At slide #",s," and subarray #",pt," there was a convergence problem.",sep=""))}   
+       
+         trials<-1; mm<-1;
+         while((trials<=20)&(mm>0.5)){
+          nety5 <- nnet(cbind(Mat[s1234,vectd]), Mat[s1234,4], weights=weigthsamp[s1234],size = nodes, rang = 0.5,
+                decay=1e-4, maxit = ite,reltol=0.75e-7,trace=verbose)
+          yen<-NULL;
+          yen<-predict(nety5,cbind(Xn[-s1234,vectd]))
+          #and denormalize them back
+          Mfit<-denorm28(yen,yLst$mins,yLst$maxs)
+         Mfitted<-cbind(Mfit[[1]])
+          mm<-abs(median(Xyclean[-s1234,4]-Mfitted)) #compute the mean of normalized M values, to know if all is ok
+          trials<-trials+1;
+       }
+        if(trials>=20){warning(paste("At slide #",s," and subarray #",pt," there was a convergence problem.",sep=""))}   
+
+       
        
         # get the fitted values 
         yen<-array(dim=len) 
-        yen[-s234]<-predict(nety1,cbind(Xn[-s234,vectd]))
-        yen[-s134]<-predict(nety2,cbind(Xn[-s134,vectd]))
-        yen[-s124]<-predict(nety3,cbind(Xn[-s124,vectd]))
-        yen[-s123]<-predict(nety4,cbind(Xn[-s123,vectd]))
+        yen[-s2345]<-predict(nety1,cbind(Xn[-s2345,vectd]))
+        yen[-s1345]<-predict(nety2,cbind(Xn[-s1345,vectd]))
+        yen[-s1245]<-predict(nety3,cbind(Xn[-s1245,vectd]))
+        yen[-s1235]<-predict(nety4,cbind(Xn[-s1235,vectd]))
+        yen[-s1234]<-predict(nety5,cbind(Xn[-s1234,vectd]))
         #and denormalize them back
         Mfit<-denorm28(yen,yLst$mins,yLst$maxs)
-	  Mfitted<-cbind(Mfit[[1]])
-	  Mfit<-Mfitted;
+        Mfitted<-cbind(Mfit[[1]])
+        Mfit<-Mfitted;
         
         # insert NaNs where they where in the original M vector if is the case
          NAloc<-attr(Xyclean,"na.action")
         if (length(NAloc)>0){
-          yelong<-matrix(NaN,dim(M)[1],1)
+          yelong<-matrix(NA,dim(M)[1],1)
           yelong[-NAloc,1]<-Mfit
         }else{yelong<-Mfit }
-
+        estm<-cbind(estm,yelong);
+      } #end get 3 estimates
+      meann<-function(x){if(sum(is.na(x))>0){NA}else{mean(x,trim=0.25)}}
+      yelong<-apply(estm,1,mean);
       #normalizing by substracting the predicted values
        maM(mbatchn)[ind,s]<-cbind(M)-yelong
 
    } #end with print tip 
    if(maplots) {
      #ploting the original M vs A for each slide 
-     if(interactive()){x11()}
-    
-     plot(maA(mbatch[,s]),maM(mbatch[,s]),xlab="A",ylab="M",main=paste("MA-plot before ANN normalization. Slide #",s,sep=""),pch=20,cex.main=0.5,cex.lab=0.5);
+     if(!interactive()){ 
+       par(mfrow=c(2,1))
+       par(mar=c(2, 4, 2, 2))
+
+     } else {x11()}
+     
+     plot(maA(mbatch[,s]),maM(mbatch[,s]),xlab="A",ylab="M",main=paste("MA-plot before ANN normalization. Slide #",s,sep=""),pch=20,cex.main=0.7,cex.lab=0.7);
      lines(c(min(na.omit(maA(mbatch[,s]))),max(na.omit(maA(mbatch[,s])))),c(0,0),col="grey",lwd=2); 
      
      if (nv==1){
@@ -192,12 +219,13 @@ maNormNN<-function(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,
         a<-maA(mbatch[maPrintTip(mbatch)==ppt,s])
         be<-maM(mbatch[maPrintTip(mbatch)==ppt,s])-maM(mbatchn[maPrintTip(mbatch)==ppt,s])
         or<-order(a)
-        points(a[or],be[or],col=cola[ppt],pch=20,cex=0.5);}
+        xx<-a[or];yy<-be[or];
+         points(xx,yy,col=cola[ppt],cex=0.5);
+        }
        legend(min(na.omit(maA(mbatch[,s]))),max(na.omit(maM(mbatch[,s]))),legend=paste(rep("Pt.",Npt),1:Npt,sep=""),text.col=cola[1:Npt],cex=0.5,ncol=Npt/2)
-     
      }
      if(interactive()){x11()}
-     plot(maA(mbatchn[,s]),maM(mbatchn[,s]),xlab="A",ylab="M",main=paste("MA-plot after ANN normalization. Slide #",s,sep=""),pch=20,cex.main=0.5,cex.lab=0.75);
+     plot(maA(mbatchn[,s]),maM(mbatchn[,s]),xlab="A",ylab="M",main=paste("MA-plot after ANN normalization. Slide #",s,sep=""),pch=20,cex.main=0.7,cex.lab=0.7);
      lines(c(min(na.omit(maA(mbatch[,s]))),max(na.omit(maA(mbatch[,s])))),c(0,0),col="red",lwd=2); 
 
     }
@@ -208,3 +236,6 @@ maNormNN<-function(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,
  slot(mbatchn, "maNormCall")<-call("maNormNN")
  return(mbatchn)
 }
+
+
+

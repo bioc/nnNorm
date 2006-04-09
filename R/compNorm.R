@@ -52,7 +52,7 @@ compNorm<-function(x,...,bw="AUTO",xlim=c(-3,3),titles="AUTO",type="d")
    for (i in 1:(lna+1)){
      lines(lst[[i]],col=cols[i],lwd=2)
    }
-   legend(xlims[1], maxy, legend = nms,pch=pchs, col = cols, cex = 0.9)
+   legend(xlims[1], maxy, legend = nms, col = cols, fill=cols, cex = 0.9)
  }
  madval<-NULL
  #compute mad values

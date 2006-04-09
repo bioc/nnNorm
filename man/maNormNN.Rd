@@ -4,7 +4,7 @@
 \description{This function normalizes a batch of cDNA arrays by removing the intensity and spatial dependent bias.
 }
 \usage{
-maNormNN(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,robust=TRUE,maplots=FALSE) 
+maNormNN(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,robust=TRUE,maplots=FALSE,verbose=FALSE) 
 }
 
 \arguments{
@@ -32,6 +32,10 @@ maNormNN(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,robust=TRU
   }
   \item{maplots}{If set to \code{"TRUE"} will produce a \eqn{M-A} plot for each slide before and after normalization. 
   }
+  \item{verbose}{If set to \code{"TRUE"} will show the output of the nnet function which is training the neural
+    network models. 
+  }
+
 }
 
 \details{This function uses neural networks to model the bias in cDNA data sets.

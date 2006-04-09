@@ -18,8 +18,9 @@
 \maketitle
 
 \begin{center}
-1. CRBF, Laval University, CANADA,
-   \url{http://www.crbf.ulaval.ca}\\
+Wayne State University, Medicine - Perinatology Research Branch, Detroit,
+Michigan, 48201. 
+   \url{http://vortex.cs.wayne.edu/tarca}\\
 \end{center}
 
 
@@ -46,13 +47,13 @@ data(swirl)
 Now we perform normalization with the method {\tt maNormNN} available in the {\tt nnNorm} package. 
 This function returns a {\tt marrayNorm} object (containing the normalized log ratios). 
 
-<<eval=TRUE,echo=TRUE,results=hide>>=
+<<eval=TRUE,echo=TRUE,results=verbatim>>=
 library(nnNorm)
-swirl_n1<-maNormNN(swirl[,1])
+swirl_n<-maNormNN(swirl[,1:2])
 @
 
 If data is available in a RGList or MAList object (see {\tt limma} package) they can be easily converted to 
-a  {\tt marrayRaw} object using functionality of the libray {\tt convert}.
+a  {\tt marrayRaw} object using functionality of the library {\tt convert}.
 For more details on the {\tt nnNorm} package Please consult nnNormGuide.pdf.
 
 \bibliography{nnNorm} 
