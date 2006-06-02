@@ -8,9 +8,9 @@
 \usepackage[authoryear,round]{natbib}
 \usepackage{hyperref}
 
-\oddsidemargin 0.0in 
+\oddsidemargin 0.0in
 \textwidth 6.5in
-\topmargin 0.2in 
+\topmargin 0.2in
 \textheight 9 in
 
 \bibliographystyle{abbrvnat}
@@ -22,7 +22,7 @@
 
 \begin{center}
 Wayne State University, Medicine - Perinatology Research Branch, Detroit,
-Michigan, 48201. 
+Michigan, 48201.
    \url{http://vortex.cs.wayne.edu/tarca}\\
 \end{center}
 
@@ -31,16 +31,16 @@ Michigan, 48201.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Overview}
 
-The {\tt nnNorm} package contains mainly a function for intensity and spatial normalization of 
+The {\tt nnNorm} package contains mainly a function for intensity and spatial normalization of
 cDNA two color data, or paired single channel data, based on neural networks fitting. Functionality
 to compare the distributions of the normalized log ratios is also provided. For the simpler case
 when only intensity normalization is desired (univariate distortion color model), we provide
-functionality to plot the bias estimate against the level of intensity for every print tip group. 
-\\  
+functionality to plot the bias estimate against the level of intensity for every print tip group.
+\\
 
 {\bf Introduction to intensity and spatial normalization.} This document provides a
 tutorial for using the {\tt nnNorm} package. For a detailed description of the principles and
-algorithmic implemented by this package consult \cite{tarca04}.\\ 
+algorithmic implemented by this package consult \cite{tarca04}.\\
 
 {\bf Spatial and intensity normalization implemented in {\tt nnNorm}.}
 The {\tt nnNorm} package implements intensity and spatial normalization of cDNA data
@@ -50,24 +50,30 @@ are used as regressors into a neural network model. Resistance to outliers is en
 by assigning to each spot a weight which is dependent on how extreme its log ratio, {\tt M},
 is with respect to that of the spots having about the same {\tt A} level belonging to the same
 print tip group. A 5-fold crossvalidation procedure is used to obtain the bias estimate
-for every spot.\\ 
+for every spot.\\
 
 \section{Changes with respect to previous versions}
-The first version of {\tt nnNorm} was 1.4.0 and released within bioC 1.7. Thank to the users' feed-back,
-{\tt nnNorm} continued to improve through the subsequent versions. We would like to thank especially to:
-Ken Kompass (Wash Univ, St Louis, MO, USA) for pointing out the need of a verbose argument to the 
-maNormNN function; Elizabeth Thomas (CHR, Harvard University) and  Philippe Hupé 
-(Institut Curie, Paris France) who provided us with data sets on which we could test new methods to detect 
-convergence problems in neural networks training in the first version of nnNorm, 1.4.0.
-The changes in the actual {\tt nnNorm} version with respect to the previous ones include: a) avoiding 
-convergence problems in neural networks fitting, b) using a 5-fold cross-validation method instead of
-4-fold used previously, c) taking an average over the predictions of several models trained on the same data
-but starting with different initial weights c) adding a verbose parameter and d) slightly different parameter values
-of the algorithm to increase even more the robustness.
+The first version of {\tt nnNorm} was 1.4.0 and released within bioC
+1.7. Thank to the users' feed-back, {\tt nnNorm} continued to
+improve through the subsequent versions. We would like to thank
+especially to: Ken Kompass (Wash Univ, St Louis, MO, USA) for
+pointing out the need of a verbose argument to the maNormNN
+function; Elizabeth Thomas (CHR, Harvard University) and  Philippe
+Hupé (Institut Curie, Paris France) who provided us with data sets
+on which we could test new methods to detect convergence problems in
+neural networks training in the first version of nnNorm, 1.4.0. The
+changes in the actual {\tt nnNorm} version with respect to the
+previous ones include: a) avoiding convergence problems in neural
+networks fitting, b) using a 5-fold cross-validation method instead
+of 4-fold used previously, c) taking an average over the predictions
+of several models trained on the same data but starting with
+different initial weights d) adding a verbose parameter and e)
+slightly different parameter values of the algorithm to increase
+even more the robustness.
 
 {\bf Help files.}  As with any R package, detailed information on functions, their arguments
 and value, can be obtained in the help files. For instance, to view the help file for the function {\tt
- maNormNN} in a browser, use {\tt help.start()} followed by {\tt ? maNormNN}. 
+ maNormNN} in a browser, use {\tt help.start()} followed by {\tt ? maNormNN}.
 
 
 
@@ -76,7 +82,7 @@ and value, can be obtained in the help files. For instance, to view the help fil
 
  We demonstrate the functionality of this package using gene expression data from the Apo AI
 study of \cite{callow00}. To load the Apo dataset in a object called {\tt Apo} of type
-{\tt marrayRaw}, we use the following lines:  
+{\tt marrayRaw}, we use the following lines:
 
 <<eval=TRUE, echo=TRUE>>=
 library(marray)
@@ -84,7 +90,7 @@ dataweb<-"http://www.stat.berkeley.edu/users/terry/zarray/Data/ApoA1/rg_a1ko_mor
 data<-read.table(dataweb,header=TRUE, sep=",", dec=".")
 ApoLayout<-new('marrayLayout',maNgr=4,maNgc=4,maNsr=19,maNsc=21)
 spots<-4*4*19*21 # spots per array
-Gb<-Rb<-array(c(0),c(spots,16)); 
+Gb<-Rb<-array(c(0),c(spots,16));
 Gf<-as.matrix(data[,seq(2,33,2)])
 Rf<-as.matrix(data[,seq(3,33,2)])
 labs <- c(paste(c("c"), 1:8, sep=""),paste(c("k"), 1:8, sep=""))
@@ -95,9 +101,9 @@ Apo<-new('marrayRaw',maRf=Rf,maGf=Gf,maRb=Rb,maGb=Gb,maLayout=ApoLayout,maTarget
 Note that the background values were set to zero as the data file contains background corrected red and green
 intensities.\\
 Due to several factors, the bias in the microarray experiments may depend not only on the average
-log intensity level but also on the spatial coordinates \cite{yang02}. Figure \ref{fig:rawImage} shows the 
-reconstructed image of log ratios {\tt M}, for slide No. 16 in the Apo AI data set. This image is obtained using the 
-{\tt maImage} function of {\tt marray} package.  
+log intensity level but also on the spatial coordinates \cite{yang02}. Figure \ref{fig:rawImage} shows the
+reconstructed image of log ratios {\tt M}, for slide No. 16 in the Apo AI data set. This image is obtained using the
+{\tt maImage} function of {\tt marray} package.
 
 <<rawImage,fig=TRUE,prefix=FALSE,echo=TRUE,include=FALSE,results=hide>>=
 RGcol <- maPalette(low = "green", high = "red", k = 20)
@@ -107,19 +113,19 @@ maImage(Apo[,16],x="maM",col=RGcol,zlim=c(-2,2))
 Observe the uneven distribution of M values in the print tip groups situated at the bottom of the figure.
 
 
-\begin{figure} 
-\begin{center} 
-\includegraphics[width=4in,height=3.5in,angle=0]{rawImage} 
-\end{center} 
+\begin{figure}
+\begin{center}
+\includegraphics[width=4in,height=3.5in,angle=0]{rawImage}
+\end{center}
 \caption{Image of raw M values for Apo data set, slide No. 16.}
-\protect\label{fig:rawImage} 
+\protect\label{fig:rawImage}
 \end{figure}
 
 
 Now we perform normalization with the method of the {\tt nnNorm} package called {\tt maNormNN}. This function
 returns a {\tt marrayNorm} type object (containing the normalized
 log ratios). The {\tt maNormNN} function is a print-tip oriented
-normalization method. 
+normalization method.
 
 <<eval=TRUE,echo=TRUE,results=hide>>=
 library(nnNorm)
@@ -133,17 +139,17 @@ intensity and spatial normalization. Observe a rather uniform distribution of re
 maImage(ApNN2DA[,16],x="maM",col=RGcol,zlim=c(-2,2))
 @
 
-\begin{figure} 
-\begin{center} 
-\includegraphics[width=4in,height=3.5in,angle=0]{NNImage} 
-\end{center} 
+\begin{figure}
+\begin{center}
+\includegraphics[width=4in,height=3.5in,angle=0]{NNImage}
+\end{center}
 \caption{Image of M values after nnNorm normalization, for Apo data set, slide No. 16.}
-\protect\label{fig:NNImage} 
+\protect\label{fig:NNImage}
 \end{figure}
 
 
 We may compare the robust neural networks normalization method with other existing approaches
-that takes into account intensity and spatial bias fluctuations, like for e.g. a composite 
+that takes into account intensity and spatial bias fluctuations, like for e.g. a composite
 normalization method available in {\tt marray} package.
 
 <<eval=TRUE, echo=TRUE>>=
@@ -152,7 +158,7 @@ AcPLo2D<-maNormMain(Apo, f.loc = list(maNorm2D(),maNormLoess(x="maA",y="maM",
 @
 
 We define a function able to compute the \cite{westfall&young93} adjusted p-values for different normalizations of the same
-Apo batch. For this we use functionality of the {\tt multtest} package (\cite{dudoit&shaffer02}). 
+Apo batch. For this we use functionality of the {\tt multtest} package (\cite{dudoit&shaffer02}).
 
 <<eval=TRUE, echo=TRUE>>=
 library(multtest)
@@ -164,24 +170,24 @@ ord <- order(resT$index)
 resT$adjp[ord]
 }
 @
-Now we get the adjusted p-values for the three situations: raw data (Anone), composite 
-normalization (cpLo2DA) and robust neural networks based (pNN2DA). 
+Now we get the adjusted p-values for the three situations: raw data (Anone), composite
+normalization (cpLo2DA) and robust neural networks based (pNN2DA).
 
 <<eval=TRUE, results=hide>>=
 pAnone<-log10(getP(Apo))
 pAcPLo2D<-log10(getP(AcPLo2D))
-pApNN2DA<-log10(getP(ApNN2DA)) 
+pApNN2DA<-log10(getP(ApNN2DA))
 @
 
-We plot the log of adjusted p-values obtained using the normalized data. Results are shown in 
-Figure \ref{fig:pPlot}. 
- 
+We plot the log of adjusted p-values obtained using the normalized data. Results are shown in
+Figure \ref{fig:pPlot}.
+
 <<pPlot,fig=TRUE,prefix=FALSE,echo=TRUE,include=FALSE,results=hide>>=
 #spot numbers with the smallest t statistic after print tip loess normalization
 kout<-c(2149,4139,5356,540,1739,1496,2537,4941)
 methods<-c("none", "cPLo2D","pNN2DA")
 plot(rep(1,length(pAnone)),pAnone,xlim=c(1,3),ylim=c(-4,0),xlab="Method",
-    ylab="log10(p)",axes=FALSE); 
+    ylab="log10(p)",axes=FALSE);
 points(rep(1,8),pAnone[kout],col="red",pch=20)
 points(rep(2,length(pAcPLo2D)),pAcPLo2D); points(rep(2,8),pAcPLo2D[kout],col="red",pch=20)
 points(rep(3,length(pApNN2DA)),pApNN2DA); points(rep(3,8),pApNN2DA[kout],col="red",pch=20)
@@ -191,21 +197,21 @@ axis(1, 1:3, methods);axis(2); box()
 The spots with the indices {\tt kout} above are those with smallest t-statistics after loess
 print tip normalization as in \cite{yang01}.
 
-\begin{figure} 
-\begin{center} 
-\includegraphics[width=4in,height=3.5in,angle=0]{pPlot} 
-\end{center} 
+\begin{figure}
+\begin{center}
+\includegraphics[width=4in,height=3.5in,angle=0]{pPlot}
+\end{center}
 \caption{Adjusted p values for raw data (none), composite normalization (cpLo2D), and robust neural networks (pNN2DA)}
-\protect\label{fig:pPlot} 
+\protect\label{fig:pPlot}
 \end{figure}
 
 
-Observe in Figure \ref{fig:pPlot} that the 8 genes (represented by filled red circles) may be confidently 
-distinguished from the bulk of non-differentially expressed genes at a threshold of p=0.01. As some of the genes 
+Observe in Figure \ref{fig:pPlot} that the 8 genes (represented by filled red circles) may be confidently
+distinguished from the bulk of non-differentially expressed genes at a threshold of p=0.01. As some of the genes
 may have received about the same adjusted p-value, less that 8 filled circles may be observed for a particular method.
 
 Now we may want to compare the ability of this new normalization method to reduce the variability of log ratios
-within slides. 
+within slides.
 A easy way to do that is to look at the distributions of the normalized {\tt M} values. The method {\tt compNorm}
 of {\tt nnNorm} package will do this (see Figure \ref{fig:densityC}).
 
@@ -213,13 +219,13 @@ of {\tt nnNorm} package will do this (see Figure \ref{fig:densityC}).
 compNorm(maM(Apo),maM(AcPLo2D),maM(ApNN2DA),bw=0.9,xlim=c(-2,2),titles=methods,type="d")
 @
 
-\begin{figure} 
-\begin{center} 
-\includegraphics[width=4in,height=3.5in,angle=0]{densityC} 
-\end{center} 
+\begin{figure}
+\begin{center}
+\includegraphics[width=4in,height=3.5in,angle=0]{densityC}
+\end{center}
 \caption{Density plots of normalized log ratios. The highest density curve corresponds to the robust
 neural networks normalization.}
-\protect\label{fig:densityC} 
+\protect\label{fig:densityC}
 \end{figure}
 
 
@@ -230,33 +236,33 @@ compNorm(maM(Apo),maM(AcPLo2D),maM(ApNN2DA),bw=0.9,xlim=c(-2,2),titles=methods,t
 @
 
 
-\begin{figure} 
-\begin{center} 
-\includegraphics[width=4in,height=3.5in,angle=0]{bPlot} 
-\end{center} 
+\begin{figure}
+\begin{center}
+\includegraphics[width=4in,height=3.5in,angle=0]{bPlot}
+\end{center}
 \caption{Box plot of normalized log ratios}
-\protect\label{fig:bPlot} 
+\protect\label{fig:bPlot}
 \end{figure}
 
 
-The {\tt maNormNN} function in {\tt nnNorm} package offers flexibility in choosing 
-the type of dependence of the bias to be accounted for. For e.g. setting {\tt binHeight} parameter 
+The {\tt maNormNN} function in {\tt nnNorm} package offers flexibility in choosing
+the type of dependence of the bias to be accounted for. For e.g. setting {\tt binHeight} parameter
 as equal with the number of spot rows in a print tip group, will discard the variable
-{\tt Y} in the bias model. 
+{\tt Y} in the bias model.
 
 <<eval=TRUE, echo=TRUE, results=hide>>=
 ApoNNy<-maNormNN(Apo[,1],binWidth=3,binHeight=maNsr(Apo))
 @
 
 In this case only {\tt A} and {\tt X} will be used as regressors for the bias. Similarly by setting
-{\tt binWidth=maNsc(Apo)} in the same function will suppress the contribution of the {\tt X} variable 
+{\tt binWidth=maNsc(Apo)} in the same function will suppress the contribution of the {\tt X} variable
 form the bias estimation.
 The {\tt M-A} plots may be shown before and after the normalization for each slide if the parameter {\tt maplots}
 is set to {\tt "TRUE"}.
 
-For the case when only intensity normalization is desired ({\tt X}, and {\tt Y} regressors discarded) 
-we provide the facility to plot the bias estimates against the intensity level. For e.g. lets perform intensity normalization only 
-for the 13th slide of the Apo batch: 
+For the case when only intensity normalization is desired ({\tt X}, and {\tt Y} regressors discarded)
+we provide the facility to plot the bias estimates against the intensity level. For e.g. lets perform intensity normalization only
+for the 13th slide of the Apo batch:
 
 <<robust,fig=TRUE,prefix=FALSE,echo=TRUE,include=FALSE,results=hide>>=
 par(mfrow=c(2,1))
@@ -265,13 +271,13 @@ ApoNr<-maNormNN(Apo[,13],binWidth=maNsc(Apo),binHeight=maNsr(Apo),robust=TRUE,ma
 @
 
 
-\begin{figure} 
-\begin{center} 
-\includegraphics[width=4.5in,height=5in,angle=0]{robust} 
-\end{center} 
+\begin{figure}
+\begin{center}
+\includegraphics[width=4.5in,height=5in,angle=0]{robust}
+\end{center}
 \caption{M-A plots before and after normalization for the whole slide.}
-\protect\label{fig:robust} 
+\protect\label{fig:robust}
 \end{figure}
 
-\bibliography{nnNormGuide} 
+\bibliography{nnNormGuide}
 \end{document}
