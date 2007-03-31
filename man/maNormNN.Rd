@@ -4,11 +4,13 @@
 \description{This function normalizes a batch of cDNA arrays by removing the intensity and spatial dependent bias.
 }
 \usage{
-maNormNN(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,robust=TRUE,maplots=FALSE,verbose=FALSE) 
+maNormNN(mbatch,w=NULL,binWidth=3,binHeight=3,model.nonlins=3,iterations=80,nFolds=5,maplots=FALSE,verbose=FALSE) 
 }
 
 \arguments{
   \item{mbatch}{A \code{marrayRaw} or \code{marrayNorm} batch of arrays.
+  }
+  \item{w}{Weights to be assigned to each spot. If provided, it should be a vector with the same length as maNspots(mbatch).
   }
   \item{binWidth}{Width of the bins in the \eqn{X} direction (spot column) in which the 
     print tip will be divided in order to account for spatial variation. Max value 
@@ -27,8 +29,9 @@ maNormNN(mbatch,binWidth=3,binHeight=3,model.nonlins=3,iterations=200,robust=TRU
   \item{iterations}{The number of iterations at which (if not converged) the training of the neural net will be 
                    stopped.
   }
-  \item{robust}{If set to \code{"TRUE"}, each spot will be assigned a weight in the model identification, providing resistance to
-          outliers.
+  \item{nFolds}{Number of cross-validation folds. It represents the number of equal parts in which the data from a 
+     print tip is divided into: the model is trained on nFolds-1 parts and the bias is estimated for one part at the 
+    time. Higher values improve the results but increase the computation time. Ideal values are between 5 and 10. 
   }
   \item{maplots}{If set to \code{"TRUE"} will produce a \eqn{M-A} plot for each slide before and after normalization. 
   }

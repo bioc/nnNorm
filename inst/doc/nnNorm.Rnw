@@ -26,13 +26,19 @@ Michigan, 48201.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Overview}
 
-The {\tt nnNorm} package contains mainly a function for intensity and spatial normalization of cDNA two color data, or paired single channel data, based on neural networks fitting. Functionality
-to compare the distributions of the normalized log ratios is also provided. For the simpler case when only intensity normalization is performed (univariate distortion color model), 
-we provide functionality to plot the bias estimates against the level of intensity for each print tip group on the slide.
-\\  
-This document provides only a basic introduction to the {\tt nnNorm} package. A more extended description is available in the nnNormGuide.pdf document.
+The {\tt nnNorm} package provides utilities to detect and correct for spatial bias with two 
+color DNA microarrays (or paired single channel data). The normalization implemented in {\tt nnNorm}
+package is based on neural networks models. Functionality to compare the distributions of the 
+normalized log ratios is also provided. For the simpler case when only intensity normalization 
+is desired (univariate distortion color model, similar to print tip loess normalization), we provide
+functionality to plot the bias estimate against the level of intensity for every print tip group.
+\\
+
+This document provides only a basic introduction to the {\tt nnNorm} package. A more extended description is available 
+in the nnNormGuide.pdf document.
 For a detailed description of the principles and algorithmic implemented by this package consult \cite{tarca04}.\\ 
 
 We demonstrate the functionality of this package using the swirl data set from the {\tt marray} package.

@@ -1,13 +1,13 @@
 Package: nnNorm
-Version: 1.11.0
-Date: 2006-04-06
+Version: 1.2.0
+Date: 2007-03-28
 Title: Spatial and intensity based normalization of cDNA microarray
         data based on robust neural nets
 Author: Tarca Adi Laurentiu <atarca@med.wayne.edu>
 Depends: R(>= 2.2.0), nnet, marray
-Maintainer: Tarca Laurentiu <atarca@med.wayne.edu>
-Description: Spatial and intensity based normalization of cDNA
-        microarray data based on robust neural nets
+Maintainer: Tarca Adi Laurentiu <atarca@med.wayne.edu>
+Description: This package allows to detect and correct for spatial and intensity biases. 
+             The normalization method implemented in this package is based on robust neural networks fitting.
 biocViews: Microarray, TwoChannel, Preprocessing
 License: LGPL
 URL: 
