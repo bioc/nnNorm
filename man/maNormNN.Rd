@@ -4,7 +4,7 @@
 \description{This function normalizes a batch of cDNA arrays by removing the intensity and spatial dependent bias.
 }
 \usage{
-maNormNN(mbatch,w=NULL,binWidth=3,binHeight=3,model.nonlins=3,iterations=80,nFolds=5,maplots=FALSE,verbose=FALSE) 
+maNormNN(mbatch,w=NULL,binWidth=3,binHeight=3,model.nonlins=3,iterations=100,nFolds=10,maplots=FALSE,verbose=FALSE) 
 }
 
 \arguments{
