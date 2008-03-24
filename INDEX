@@ -1,3 +1,0 @@
-compNorm                Compares the distribution of several data sets by plotting their density curves
-detectSpatialBias		Allows detection of spatial artifact within the print-tips of two-channel arrays
-maNormNN                Intensity and spatial normalization using robust neural networks fitting
