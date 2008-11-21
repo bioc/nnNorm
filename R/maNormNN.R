@@ -114,7 +114,7 @@ maNormNN<-function(mbatch,w=NULL,binWidth=3,binHeight=3,model.nonlins=3,iteratio
                maxit = ite,reltol=0.75e-7,trace=verbose)       
          }else {
           nety1 <- nnet(rM~ryr+rA,data=Xyn, subset=ssetT,weights=w[ind], size = nodes, rang = 0.5,
-               decay, maxit = ite,reltol=0.75e-7,trace=verbose)       
+               maxit = ite,reltol=0.75e-7,trace=verbose)       
          }
          yen<-predict(nety1,Xyn[ssetG,])
          prd[sbs==cv,rps]<-denorm28(yen,mx=max(M,na.rm=TRUE),mn=min(M,na.rm=TRUE))
