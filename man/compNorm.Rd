@@ -1,6 +1,6 @@
 \name{compNorm}
 \alias{compNorm}
-\title{Compares the distribution of several data sets}
+\title{Compares the distribution of several vectors at a time using either boxplots or density curves}
 \description{This function was concieved to easily compare several normalization methods in terms 
 	of variability of log-ratios, M. Basically it produces two plots: The first is a the density 
 	plot of the several matrices passed as arguments, while the second is a box plot. 
@@ -10,7 +10,7 @@
 compNorm(x,...,bw="AUTO",xlim=c(-3,3),titles="AUTO",type="d") 
 }
 \arguments{
-  \item{x}{A matrix of numerical values, e.q. the \eqn{M} values of a data set: \code{maM(swirl)}.
+  \item{x}{A vector of numerical values, e.q. the \eqn{M} values of a data set: \code{as.vector(maM(swirl))}.
   }
   \item{...}{An undefined number of objects similar with \code{x}.
   }	
@@ -42,9 +42,9 @@ compNorm(x,...,bw="AUTO",xlim=c(-3,3),titles="AUTO",type="d")
  swirlLoess<-maNormMain(swirl[,1]) 
  nms<-c("None","Loess","NNets")
  #compare distributions: density plot
- compNorm(maM(swirl[,1]),maM(swirlLoess),maM(swirlNN),xlim=c(- 2,2),bw="AUTO",titles=nms,type="d")
+ compNorm(as.vector(maM(swirl[,1])),as.vector(maM(swirlLoess)),as.vector(maM(swirlNN)),xlim=c(- 2,2),bw="AUTO",titles=nms,type="d")
  #compare distributions: box plot
- compNorm(maM(swirl[,1]),maM(swirlLoess),maM(swirlNN),xlim=c(- 2,2),bw="AUTO",titles=nms,type="b")
+ compNorm(as.vector(maM(swirl[,1])),as.vector(maM(swirlLoess)),as.vector(maM(swirlNN)),xlim=c(- 2,2),bw="AUTO",titles=nms,type="b")
 
 }
 \author{Tarca, A.L.}

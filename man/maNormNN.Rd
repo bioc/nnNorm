@@ -1,8 +1,7 @@
 \name{maNormNN}
 \alias{maNormNN}
 \title{Intensity and spatial normalization using robust neural networks fitting}
-\description{This function normalizes a batch of cDNA arrays by removing the intensity and spatial dependent bias.
-}
+\description{This function normalizes a batch of cDNA arrays by removing the intensity and spatial dependent bias.}
 \usage{
 maNormNN(mbatch,w=NULL,binWidth=3,binHeight=3,model.nonlins=3,iterations=100,nFolds=10,maplots=FALSE,verbose=FALSE) 
 }
@@ -41,15 +40,14 @@ maNormNN(mbatch,w=NULL,binWidth=3,binHeight=3,model.nonlins=3,iterations=100,nFo
 
 }
 
-\details{This function uses neural networks to model the bias in cDNA data sets.
-}
+\details{This function uses neural networks to model the bias in cDNA data sets.}
 
 
 \value{
   A \code{marrayNorm} object containing the normalized log ratios. See \code{marrayNorm} 
     class for details
   }
-}
+
 
   
 

@@ -2,8 +2,7 @@
 \alias{detectSpatialBias}
 \title{Detecting spatial bias within the print-tips of a two channel array}
 \description{This function allows to identify in two channel batch of arrays, which are the print-tips where 
-spatial bias is present.
-}
+spatial bias is present.}
 \usage{
 detectSpatialBias(mbatch, corThreshold=0.6) 
 }
@@ -29,11 +28,9 @@ are only interested in a sigle direction of the correlation, i.e. either positiv
 to the print tips counted metaRow wise, and the columns correspond to arrays. Values in these matrices superior to 33 
 point to print-tips that have more tha a third of the rows (columns) with important spatial bias.  
 }
-}
-
-  
 
 
+ 
 \examples{
 # detecting spatial bias in swirl data
 data(swirl)

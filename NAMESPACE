@@ -1,9 +1,4 @@
-## Edit Adi L. Tarca
-##Namespace file for nnNorm package
 importFrom(nnet,nnet)
-import(marray,stats)
-importFrom(graphics,lines)
-importFrom(graphics,points)
-importFrom(graphics,plot)
+import(marray,stats,graphics)
 export("maNormNN","detectSpatialBias","compNorm")
 

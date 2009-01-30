@@ -14,14 +14,14 @@
 \begin{document}
 
 \title{\bf Bioconductor's nnNorm package}
-\author{Laurentiu A. Tarca$^1$}
+\author{Adi L. Tarca$^{1,2,3}$}
+
 \maketitle
 
-\begin{center}
-Wayne State University, Medicine - Perinatology Research Branch, Detroit,
-Michigan, 48201. 
-   \url{http://vortex.cs.wayne.edu/tarca}\\
-\end{center}
+$^1$Department of Computer Science, Wayne State University\\
+$^2$Bioinformatics and Computational Biology Unit of the NIH Perinatology Research Branch\\
+$^3$Center for Molecular Medicine and Genetics, Wayne State University \\
+\url{http://bioinformaticsprb.med.wayne.edu/tarca/}
 
 
 
