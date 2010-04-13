@@ -1,4 +1,12 @@
-importFrom(nnet,nnet)
-import(marray,stats,graphics)
+importFrom("methods")
+importMethodsFrom("marray", "maA", "maM", "maM<-", "maNgc", "maNgr",
+                  "maNsamples", "maNsc", "maNspots", "maNsr",
+                  "maPrintTip", "maSpotCol", "maSpotRow")
+importFrom("graphics", "boxplot", "legend", "lines", "par", "plot", "points")
+importFrom("grDevices", "x11")
+importFrom("nnet", "nnet")
+importFrom("stats", "cor", "density", "mad", "median", "na.omit",
+           "predict", "quantile")
+
 export("maNormNN","detectSpatialBias","compNorm")
 
